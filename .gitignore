@@ -1,0 +1,20 @@
+# 敏感信息（密码、API Key 通过 GitHub Secrets 注入）
+config/config.yaml
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# 运行时数据（每次 Actions 重新生成）
+output/
+trendradar.log
+trendradar_cron.log
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store

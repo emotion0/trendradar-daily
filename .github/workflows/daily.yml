@@ -1,0 +1,36 @@
+name: TrendRadar 每日推送
+
+on:
+  schedule:
+    # 每天北京时间 10:00 (UTC+8) = UTC 02:00
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  daily-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Prepare config (inject secrets via env vars)
+        run: cp config/config.example.yaml config/config.yaml
+
+      - name: Run TrendRadar
+        env:
+          TZ: Asia/Shanghai
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: python -m trendradar
